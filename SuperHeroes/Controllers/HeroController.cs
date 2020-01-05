@@ -50,17 +50,20 @@ namespace SuperHeroes.Controllers
         // GET: Hero/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            SuperHero superHero = context.SuperHeroes.Where(h => h.Id == id).FirstOrDefault();
+            return View(superHero);
         }
 
         // POST: Hero/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(SuperHero superHero)
         {
             try
             {
-                // TODO: Add update logic here
-
+                SuperHero targetRemove = context.SuperHeroes.Where(h => h.Id == superHero.Id).FirstOrDefault();
+                context.SuperHeroes.Remove(targetRemove);
+                context.SuperHeroes.Add(superHero);
+                context.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
